@@ -1,0 +1,4 @@
+behaviors:
+  my_behavior_name:
+    trainer_type: ppo
+    
