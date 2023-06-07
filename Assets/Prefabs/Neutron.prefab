@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1768396672575390855}
   - component: {fileID: 1768396672575390852}
   - component: {fileID: 1768396672575390853}
-  - component: {fileID: 2275371183563433293}
+  - component: {fileID: 262638034743091617}
   m_Layer: 0
   m_Name: Neutron
   m_TagString: Neutron
@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768396672575390875}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.27, y: 1.16, z: 1.17}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -98,7 +98,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &2275371183563433293
+--- !u!54 &262638034743091617
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

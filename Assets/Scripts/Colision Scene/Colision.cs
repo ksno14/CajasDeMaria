@@ -12,7 +12,21 @@ public class Colision : Agent
     void Start()
     {
         Application.targetFrameRate = targetFPS;
-        combinaciones.Add(new string[] { "Proton", "Electron", "Neutron" }, reward);
+        //combinaciones.Add(new string[] { "Proton", "Electron", "Neutron" }, reward);
+        combinaciones.Add(new string[] { "Neutron" }, reward);
+        //combinaciones.Add(new string[] { "Electron", "Neutron" }, reward);
+    }
+
+    void OnCollisionEnter(Collision collision){
+        if(collision.gameObject.name!="Caja"){
+        listaAñadir(collision.gameObject.name);
+        }
+    }
+
+    void OnCollisionExit(Collision collision) {
+       if(collision.gameObject.name!="Caja"){
+        listaRemover(collision.gameObject.name);
+        }
     }
     public void listaAñadir(string nombre)
     {

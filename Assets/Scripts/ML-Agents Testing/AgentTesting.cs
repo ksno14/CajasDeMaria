@@ -13,71 +13,62 @@ public class AgentTesting : Agent
     public Rigidbody[] rigids;
     public Transform[] hijos;
     public GameObject[] prefabs;
-    public int[] spawnNumbers;
     public int velocidadMovimiento = 1;
 
-    Vector3[] spawnPositions = {
-    new Vector3(0, 0.70f, 2),
-    new Vector3(4, 0.70f, 0),
-    new Vector3(3, 0.70f, 0),
-    new Vector3(2, 0.70f, 2),
-    new Vector3(3, 0.70f, 2),
-    new Vector3(4, 0.70f, 2),
-
-    new Vector3(0, 0.70f, 0),
-    new Vector3(1, 0.70f, 0),
-    new Vector3(2, 0.70f, 0),
-    new Vector3(3, 0.70f, 0),
-    new Vector3(4, 0.70f, 0),
-    new Vector3(0, 0.70f, -2),
-    new Vector3(1, 0.70f, -2),
-    new Vector3(2, 0.70f, -2),
-    new Vector3(4, 0.70f, 0),
-    new Vector3(4, 0.70f, -2),
-
-    new Vector3(0, 0.70f, -4),
-    new Vector3(1, 0.70f, -4),
-    new Vector3(2, 0.70f, -4),
-    new Vector3(3, 0.70f, -4),
-    new Vector3(4, 0.70f, -4),
-};
-
+    public void Spawner(){
+        foreach (GameObject prefab in prefabs)
+        {
+            GameObject spawnedObject = Instantiate(prefab);
+            spawnedObject.name=prefab.name;
+            spawnedObject.transform.SetParent(transform);
+        }
+    }
+    public void SpawnerAux()
+    {
+        foreach (Transform hijo in hijos)
+        {
+            Vector3 randomPosition = new Vector3(
+                UnityEngine.Random.Range(-1, 7.5f),
+                (0.70f),
+                UnityEngine.Random.Range(-6, 2.70f)
+            );
+            hijo.position = randomPosition;
+        }
+        
+        foreach (Rigidbody rigid in rigids)
+        {
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+        }
+    }
     public override void Initialize()
     {
         Application.targetFrameRate = targetFPS;
 
+        Spawner();
         combinaciones.Add(new string[] { "Proton", "Electron", "Neutron" }, reward);
-
-        int spawnIndex = 0;
-
-        for (int i = 0; i < prefabs.Length; i++)
-        {
-            int spawnCount = spawnNumbers[i];
-            GameObject prefab = prefabs[i];
-
-            for (int j = 0; j < spawnCount; j++)
-            {
-                if (spawnIndex < spawnPositions.Length)
-                {
-                    Vector3 spawnPosition = spawnPositions[spawnIndex];
-                    GameObject clone = Instantiate(prefab, spawnPosition, Quaternion.identity);
-
-                    clone.transform.SetParent(transform);
-
-                    spawnIndex++;
-                }
-                else
-                {
-                    Debug.LogWarning("No hay suficeintes posiciones.");
-                    break;
-                }
-            }
-        }
+        combinaciones.Add(new string[] { "Electron", "Neutron" }, reward);
         hijos = GetComponentsInChildren<Transform>();
         hijos = System.Array.FindAll(hijos, t => t != transform);
         rigids = GetComponentsInChildren<Rigidbody>();
+        collisiones.Add("Electron");
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name != "Caja")
+        {
+            listaAñadir(collision.gameObject.name);
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.name != "Caja")
+        {
+            listaRemover(collision.gameObject.name);
+        }
+    }
     public void listaAñadir(string nombre)
     {
         if (!collisiones.Contains(nombre))
@@ -93,20 +84,18 @@ public class AgentTesting : Agent
     }
     public override void OnEpisodeBegin()
     {
-        hijos[0].transform.position = new Vector3(3, 0.70f, 0);
-        hijos[1].transform.position = new Vector3(0, 0.70f, 2);
-        hijos[2].transform.position = new Vector3(4, 0.70f, 0);
+        SpawnerAux();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         foreach (Transform tr in hijos)
         {
-            if (tr.gameObject.CompareTag("Electron"))
+            if (tr.gameObject.CompareTag("Neutron"))
             {
                 Vector3 distancia = (tr.position - transform.position);
                 sensor.AddObservation(distancia.normalized);
-            } 
+            }
         }
     }
 
@@ -134,5 +123,15 @@ public class AgentTesting : Agent
     {
         AddReward(0.5f);
         EndEpisode();
+    }
+
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        float horizontalAxis = Input.GetAxis("Horizontal");
+        float verticalAxis = Input.GetAxis("Vertical");
+
+        var actions = actionsOut.ContinuousActions;
+        actions[0] = horizontalAxis;
+        actions[1] = verticalAxis;
     }
 }
