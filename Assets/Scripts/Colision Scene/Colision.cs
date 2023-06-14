@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 using System.Linq;
-public class Colision : Agent
+public class Colision : MonoBehaviour
 {
     public static List<string> collisiones = new List<string>();
     public static Dictionary<string[], Action> combinaciones = new Dictionary<string[], Action>();
@@ -13,19 +13,22 @@ public class Colision : Agent
     {
         Application.targetFrameRate = targetFPS;
         //combinaciones.Add(new string[] { "Proton", "Electron", "Neutron" }, reward);
-        combinaciones.Add(new string[] { "Neutron" }, reward);
-        //combinaciones.Add(new string[] { "Electron", "Neutron" }, reward);
+        combinaciones.Add(new string[] { "Electron", "Neutron" }, reward);
     }
 
-    void OnCollisionEnter(Collision collision){
-        if(collision.gameObject.name!="Caja"){
-        listaAñadir(collision.gameObject.name);
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name != "Suelo" && collision.gameObject.name != "Bordes")
+        {
+            listaAñadir(collision.gameObject.name);
         }
     }
 
-    void OnCollisionExit(Collision collision) {
-       if(collision.gameObject.name!="Caja"){
-        listaRemover(collision.gameObject.name);
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.name != "Suelo" && collision.gameObject.name != "Bordes")
+        {
+            listaRemover(collision.gameObject.name);
         }
     }
     public void listaAñadir(string nombre)
@@ -64,17 +67,10 @@ public class Colision : Agent
     {
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.A))
         {
-            imprimir();
-        }
-    }
-
-
-
-    public void imprimir()
-    {
-        foreach (string elemento in collisiones)
+            foreach (string elemento in collisiones)
         {
             Debug.Log(elemento);
+        }
         }
     }
 }

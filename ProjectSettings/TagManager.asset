@@ -9,6 +9,8 @@ TagManager:
   - Electron
   - Atomo
   - Caja
+  - Suelo
+  - Borde
   layers:
   - Default
   - TransparentFX

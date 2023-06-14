@@ -13,13 +13,14 @@ public class AgentTesting : Agent
     public Rigidbody[] rigids;
     public Transform[] hijos;
     public GameObject[] prefabs;
-    public int velocidadMovimiento = 1;
+    public int velocidadMovimiento = 7;
 
-    public void Spawner(){
+    public void Spawner()
+    {
         foreach (GameObject prefab in prefabs)
         {
             GameObject spawnedObject = Instantiate(prefab);
-            spawnedObject.name=prefab.name;
+            spawnedObject.name = prefab.name;
             spawnedObject.transform.SetParent(transform);
         }
     }
@@ -28,13 +29,13 @@ public class AgentTesting : Agent
         foreach (Transform hijo in hijos)
         {
             Vector3 randomPosition = new Vector3(
-                UnityEngine.Random.Range(-1, 7.5f),
-                (0.70f),
-                UnityEngine.Random.Range(-6, 2.70f)
+                UnityEngine.Random.Range(4.5f,13f),
+                (1.3f),
+                UnityEngine.Random.Range(-7, 1.5f)
             );
             hijo.position = randomPosition;
         }
-        
+
         foreach (Rigidbody rigid in rigids)
         {
             rigid.velocity = Vector3.zero;
@@ -56,15 +57,19 @@ public class AgentTesting : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name != "Caja")
+        if (collision.gameObject.name != "Suelo" && collision.gameObject.name != "Bordes")
         {
             listaAñadir(collision.gameObject.name);
+        }
+        else if (collision.gameObject.name == "Bordes")
+        {
+            AddReward(-0.1f);
         }
     }
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.name != "Caja")
+        if (collision.gameObject.name != "Suelo" && collision.gameObject.name != "Bordes")
         {
             listaRemover(collision.gameObject.name);
         }
@@ -89,14 +94,8 @@ public class AgentTesting : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        foreach (Transform tr in hijos)
-        {
-            if (tr.gameObject.CompareTag("Neutron"))
-            {
-                Vector3 distancia = (tr.position - transform.position);
-                sensor.AddObservation(distancia.normalized);
-            }
-        }
+        sensor.AddObservation(hijos[0].position);
+        sensor.AddObservation(hijos[2].position);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -121,7 +120,7 @@ public class AgentTesting : Agent
     }
     public void reward()
     {
-        AddReward(0.5f);
+        AddReward(1f);
         EndEpisode();
     }
 
