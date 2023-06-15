@@ -4,4 +4,4 @@ Proyecto basado en machine learning realizado en Unity mediante ML-Agents Librar
 
 # Demo
 
-![Texto alternativo](/Assets/Media/Demo.JPG)
+![Demo](/Assets/Media/demo.jpg)
