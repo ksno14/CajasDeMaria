@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5098929007396900446}
   - component: {fileID: 5644909360392998382}
   m_Layer: 0
-  m_Name: Atomoz
-  m_TagString: Untagged
+  m_Name: Atomo
+  m_TagString: Atomo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

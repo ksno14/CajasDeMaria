@@ -17,15 +17,10 @@ public class Random : Agent
     public GameObject[] prefabsAux2;
     private GameObject atomoz;
     public Material[] materiales;
-    public int velocidadMovimiento = 10;
+    public int velocidadMovimiento = 5;
     private bool enColision12 = false;
     private bool enColision13 = false;
     private bool enColision23 = false;
-    private float initialPenalty = 0.02f;
-    private float penaltyIncreaseRate = 0.001f;
-    private int penaltyCount;
-    private float penalty;
-
     public void Spawner()
     {
         foreach (GameObject prefab in prefabs)
@@ -56,7 +51,7 @@ public class Random : Agent
     }
     public override void Initialize()
     {
-        Application.targetFrameRate = targetFPS;
+        //Application.targetFrameRate = targetFPS;
 
         Spawner();
         hijos = GetComponentsInChildren<Transform>();
@@ -75,10 +70,13 @@ public class Random : Agent
     }
     public override void OnEpisodeBegin()
     {
+        GameObject[] objectsToDestroy = GameObject.FindGameObjectsWithTag("Atomo");
+
+        foreach (GameObject obj in objectsToDestroy)
+        {
+            Destroy(obj);
+        }
         SpawnerAux();
-        initialPenalty = 0.02f;
-        penaltyIncreaseRate = 0.001f;
-        penaltyCount = 0;
         hijos = GetComponentsInChildren<Transform>();
         hijos = System.Array.FindAll(hijos, t => t != transform);
         rigids = GetComponentsInChildren<Rigidbody>();
@@ -233,6 +231,22 @@ public class Random : Agent
         hijos[1].gameObject.SetActive(false);
         hijos[2].gameObject.SetActive(false);
         Vector3 posicionhijotemp = hijos[0].position;
+        if (posicionhijotemp.x < -4f)
+        {
+            posicionhijotemp.x = -4f;
+        }
+        if (posicionhijotemp.x > 4.6f)
+        {
+            posicionhijotemp.x = 4.6f;
+        }
+        if (posicionhijotemp.z < -4.3f)
+        {
+            posicionhijotemp.z = -4.3f;
+        }
+        if (posicionhijotemp.z > 4.3f)
+        {
+            posicionhijotemp.z = 4.3f;
+        }
         posicionhijotemp.y = 6f;
         atomoz = Instantiate(prefabsAux2[0], posicionhijotemp, Quaternion.identity);
         Invoke("Fin", 2f);
@@ -317,9 +331,7 @@ public class Random : Agent
 
                 if (prefabBounds.Intersects(hijoBounds))
                 {
-                    penalty = initialPenalty + (penaltyIncreaseRate * penaltyCount);
-                    AddReward(-penalty);
-                    penaltyCount++;
+                    AddReward(-0.05f);
                 }
             }
         }
