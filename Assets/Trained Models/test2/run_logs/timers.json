@@ -1,0 +1,49 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1686863391",
+        "python_version": "3.7.16 (default, Jan 17 2023, 16:06:28) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\ksno\\anaconda3\\envs\\cajasdemaria\\Scripts\\mlagents-learn C:\\Users\\ksno\\Desktop\\Proyectos Unity\\Cajas de Maria\\Assets\\Scripts\\cajasconfig2.yaml --resume --run-id test2",
+        "mlagents_version": "0.29.0",
+        "mlagents_envs_version": "0.29.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.13.1+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1686863413"
+    },
+    "total": 22.1379338,
+    "count": 1,
+    "self": 0.020369599999998655,
+    "children": {
+        "run_training.setup": {
+            "total": 0.10726740000000023,
+            "count": 1,
+            "self": 0.10726740000000023
+        },
+        "TrainerController.start_learning": {
+            "total": 22.0102968,
+            "count": 1,
+            "self": 9.879999999995448e-05,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 21.9157963,
+                    "count": 1,
+                    "self": 21.9157963
+                },
+                "TrainerController._save_models": {
+                    "total": 0.09440169999999881,
+                    "count": 1,
+                    "self": 0.006209500000000645,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.08819219999999817,
+                            "count": 1,
+                            "self": 0.08819219999999817
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
